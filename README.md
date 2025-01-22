@@ -9,20 +9,7 @@ ClinSearch is a powerful web application designed to help researchers, healthcar
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Development Server](#running-the-development-server)
-- [Available Scripts](#available-scripts)
-- [Project Structure](#project-structure)
-- [Key Components](#key-components)
-- [API Integration](#api-integration)
-- [Styling](#styling)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+
 
 ## Features
 
