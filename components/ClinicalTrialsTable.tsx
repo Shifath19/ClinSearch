@@ -81,6 +81,7 @@ export function ClinicalTrialsTable({ initialSearchQuery, initialIntervention }:
   const [prevPageTokens, setPrevPageTokens] = useState<string[]>([])
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
   const [selectedStudyTypes, setSelectedStudyTypes] = useState<string[]>([])
+  const [tableSearchQuery, setTableSearchQuery] = useState("")
   const isMobile = useMediaQuery("(max-width: 768px)")
 
   useEffect(() => {
@@ -251,8 +252,14 @@ export function ClinicalTrialsTable({ initialSearchQuery, initialIntervention }:
     [visibleColumns, searchQuery, intervention],
   )
 
+  const filteredTrials = useMemo(() => {
+    return trials.filter((trial) =>
+      Object.values(trial).some((value) => String(value).toLowerCase().includes(tableSearchQuery.toLowerCase())),
+    )
+  }, [trials, tableSearchQuery])
+
   const table = useReactTable({
-    data: trials,
+    data: filteredTrials,
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
   })
@@ -515,6 +522,10 @@ export function ClinicalTrialsTable({ initialSearchQuery, initialIntervention }:
     )
   }
 
+  const handleTableSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTableSearchQuery(event.target.value)
+  }
+
   const SkeletonLoader = () => (
     <div className="space-y-4">
       {Array.from({ length: 5 }).map((_, index) => (
@@ -545,7 +556,7 @@ export function ClinicalTrialsTable({ initialSearchQuery, initialIntervention }:
           {intervention && <Badge variant="secondary">Intervention: {intervention}</Badge>}
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
         <FiltersSection
           selectedPhase={selectedPhase}
           onPhaseChange={handlePhaseChange}
@@ -563,7 +574,16 @@ export function ClinicalTrialsTable({ initialSearchQuery, initialIntervention }:
           onResetStatus={() => setSelectedStatuses([])}
           onResetStudyType={() => setSelectedStudyTypes([])}
         />
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
+          <div className="w-full md:w-auto mt-4 md:mt-0">
+            <Input
+              type="search"
+              placeholder="Search in table..."
+              value={tableSearchQuery}
+              onChange={handleTableSearch}
+              className="max-w-sm"
+            />
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Studies per page:</span>
             <Select
